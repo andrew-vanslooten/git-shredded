@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Sunset Beach Workout Plan</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: Georgia, 'Times New Roman', serif; background: #F7F4EE; min-height: 100vh; padding-bottom: 48px; }
+
+    /* Header */
+    .header { background: linear-gradient(135deg, #1a3a2a 0%, #2D6A4F 55%, #1B6CA8 100%); padding: 28px 20px 22px; color: white; }
+    .header-inner { max-width: 680px; margin: 0 auto; }
+    .header-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.65; margin-bottom: 6px; font-family: sans-serif; }
+    .header h1 { font-size: 26px; font-weight: 700; line-height: 1.2; }
+    .header p { margin-top: 6px; opacity: 0.75; font-size: 13px; font-family: sans-serif; line-height: 1.5; }
+
+    /* Day Nav */
+    .day-nav { background: white; border-bottom: 1px solid #E0D9CE; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .day-nav-inner { display: flex; max-width: 680px; margin: 0 auto; }
+    .day-btn { flex: 1 0 auto; border: none; background: white; border-bottom: 3px solid transparent;
+      padding: 12px 6px 9px; cursor: pointer; min-width: 74px; text-align: center; transition: border-color 0.15s; }
+    .day-btn.active { background: #F7F4EE; }
+    .day-btn-icon { font-size: 17px; margin-bottom: 2px; }
+    .day-btn-label { font-size: 10px; font-weight: 700; font-family: sans-serif; letter-spacing: 0.5px; color: #777; }
+    .day-btn.active .day-btn-label { /* color set inline */ }
+    .day-btn-date { font-size: 9px; color: #aaa; font-family: sans-serif; margin-top: 1px; }
+
+    /* Content */
+    .content { max-width: 680px; margin: 0 auto; padding: 0 16px; }
+
+    /* Day header */
+    .day-header { margin-top: 22px; margin-bottom: 16px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .day-title { font-size: 21px; color: #1a1a1a; }
+    .day-meta { margin-top: 5px; font-size: 13px; color: #555; font-family: sans-serif; }
+    .type-badge { font-family: sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 5px 11px; border-radius: 20px; white-space: nowrap; }
+
+    /* Cards */
+    .card { background: white; border-radius: 10px; padding: 13px 15px; margin-bottom: 14px; border: 1px solid #E8E2D8; }
+    .card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 5px; font-family: sans-serif; }
+    .card-text { font-size: 14px; color: #333; line-height: 1.6; }
+
+    /* Tide card */
+    .tide-card { border-radius: 10px; padding: 13px 15px; margin-bottom: 16px; font-family: sans-serif; }
+    .tide-card .card-label { margin-bottom: 5px; }
+    .tide-times { font-size: 13px; color: #333; line-height: 1.6; }
+    .tide-note { font-size: 13px; color: #444; font-style: italic; margin-top: 4px; }
+
+    /* Tag filters */
+    .tag-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .tag-btn { font-family: sans-serif; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 14px;
+      border: none; cursor: pointer; text-transform: capitalize; transition: background 0.15s, color 0.15s; }
+    .filter-count { font-size: 11px; color: #aaa; font-family: sans-serif; margin-bottom: 8px; padding-left: 2px; }
+
+    /* Exercise list */
+    .exercise-card { background: white; border-radius: 10px; margin-bottom: 8px; border: 1px solid #E8E2D8; overflow: hidden; }
+    .exercise-btn { width: 100%; background: none; border: none; padding: 12px 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; }
+    .exercise-name-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .exercise-name { font-size: 14px; font-weight: 700; color: #1a1a1a; font-family: sans-serif; }
+    .exercise-name.sub { font-size: 13px; font-weight: 400; color: #666; font-style: italic; }
+    .exercise-tag-pill { font-size: 9px; font-family: sans-serif; font-weight: 700; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 10px; }
+    .exercise-sets { font-size: 12px; color: #888; font-family: sans-serif; margin-top: 2px; }
+    .exercise-right { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+    .exercise-equip { font-size: 10px; font-family: sans-serif; background: #F0EBE2; color: #666;
+      padding: 3px 8px; border-radius: 12px; white-space: nowrap; }
+    .exercise-chevron { color: #ccc; font-size: 14px; font-style: normal; }
+    .exercise-notes { padding: 0 14px 12px; font-family: sans-serif; font-size: 13px; color: #555;
+      line-height: 1.65; border-top: 1px solid #F0EBE2; }
+    .exercise-notes-inner { padding-top: 9px; }
+
+    /* Week overview */
+    .week-overview { background: #1a3a2a; border-radius: 12px; padding: 16px 18px; color: white; }
+    .week-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.55; margin-bottom: 12px; font-family: sans-serif; }
+    .week-list { display: flex; flex-direction: column; gap: 6px; }
+    .week-item { background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 7px 10px;
+      display: flex; align-items: center; gap: 9px; cursor: pointer; color: white; text-align: left; width: 100%; transition: background 0.15s; }
+    .week-item.active { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.22); }
+    .week-item-icon { font-size: 15px; width: 22px; }
+    .week-item-text { flex: 1; font-family: sans-serif; }
+    .week-item-name { font-size: 12px; font-weight: 600; }
+    .week-item-loc { font-size: 10px; opacity: 0.55; margin-top: 1px; }
+    .tide-pill { font-size: 9px; font-family: sans-serif; padding: 2px 7px; border-radius: 10px; font-weight: 700; color: #1a1a1a; }
+
+    /* Notes */
+    .notes-card { margin-top: 18px; padding: 13px 15px; background: #FFF8F0; border-radius: 10px; border: 1px solid #FDEBD0; font-family: sans-serif; }
+    .notes-card .card-label { margin-bottom: 7px; }
+    .notes-card ul { padding-left: 18px; font-size: 13px; color: #555; line-height: 1.85; }
+
+    /* Tide colors */
+    .tide-high { background: #FFF8F0; border: 1px solid #FDEBD0; }
+    .tide-medium { background: #EDF7EE; border: 1px solid #A9DFBF; }
+    .tide-low { background: #E8F4FD; border: 1px solid #AED6F1; }
+
+    /* Page nav */
+    .page-nav { background: #122b1e; display: flex; justify-content: center; }
+    .page-nav-btn { border: none; background: transparent; color: rgba(255,255,255,0.55); font-family: sans-serif;
+      font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 10px 24px;
+      cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; }
+    .page-nav-btn.active { color: white; border-bottom-color: #5BC8A0; }
+
+    /* Tide calendar page */
+    .tide-page { max-width: 680px; margin: 0 auto; padding: 20px 16px 40px; }
+    .tide-page-title { font-size: 22px; color: #1a1a1a; margin-bottom: 4px; }
+    .tide-page-sub { font-size: 13px; color: #888; font-family: sans-serif; margin-bottom: 20px; }
+    .tide-day-card { background: white; border-radius: 12px; margin-bottom: 12px; border: 1px solid #E8E2D8; overflow: hidden; }
+    .tide-day-header { display: flex; align-items: center; gap: 10px; padding: 13px 16px 11px; }
+    .tide-day-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .tide-day-name { font-size: 16px; font-weight: 700; color: #1a1a1a; font-family: sans-serif; }
+    .tide-day-badge { font-size: 10px; font-family: sans-serif; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; padding: 3px 9px; border-radius: 12px; margin-left: auto; white-space: nowrap; }
+    .tide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #E8E2D8; border-top: 1px solid #E8E2D8; }
+    .tide-cell { background: white; padding: 10px 14px; }
+    .tide-cell-label { font-size: 9px; font-family: sans-serif; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #aaa; margin-bottom: 3px; }
+    .tide-cell-time { font-size: 15px; font-weight: 700; font-family: sans-serif; }
+    .tide-cell-height { font-size: 12px; font-family: sans-serif; color: #888; margin-top: 1px; }
+    .tide-cell.is-high .tide-cell-time { color: #1B6CA8; }
+    .tide-cell.is-low .tide-cell-time { color: #2D6A4F; }
+    .tide-morning-note { padding: 9px 14px 12px; font-size: 12px; font-family: sans-serif;
+      color: #555; font-style: italic; border-top: 1px solid #F0EBE2; background: #FAFAF8; }
+    .tide-source { font-size: 11px; color: #bbb; font-family: sans-serif; margin-top: 20px; text-align: center; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-eyebrow">Sunset Beach, NC · June 28 – July 4, 2026</div>
+    <h1>Vacation Workout Plan</h1>
+    <p>6 days · Sandbag · Dumbbells · Bodyweight · Daily beach walks</p>
+  </div>
+</div>
+
+<div class="page-nav">
+  <button class="page-nav-btn active" id="btnWorkout" onclick="showPage('workout')">💪 Workouts</button>
+  <button class="page-nav-btn" id="btnTides" onclick="showPage('tides')">🌊 Tides</button>
+</div>
+
+<div id="workoutSection">
+<div class="day-nav">
+  <div class="day-nav-inner" id="dayNav"></div>
+</div>
+<div class="content" id="mainContent"></div>
+</div>
+<div id="tidesSection" style="display:none"></div>
+
+<script>
+const TIDES = {
+  "Sun Jun 28": { am_low: "1:05 AM (0.8 ft)", am_high: "6:55 AM (4.0 ft)", pm_low: "1:02 PM (0.5 ft)", pm_high: "7:28 PM (5.3 ft)", morning_status: "HIGH",   morning_note: "High tide peaks right at 7 AM — use driveway" },
+  "Mon Jun 29": { am_low: "1:49 AM (0.7 ft)", am_high: "7:39 AM (4.0 ft)", pm_low: "1:46 PM (0.5 ft)", pm_high: "8:08 PM (5.3 ft)", morning_status: "HIGH",   morning_note: "High tide during workout window — use driveway" },
+  "Tue Jun 30": { am_low: "2:32 AM (0.6 ft)", am_high: "8:18 AM (4.0 ft)", pm_low: "2:29 PM (0.6 ft)", pm_high: "8:45 PM (5.2 ft)", morning_status: "MEDIUM", morning_note: "Tide rising but decent packed sand by 7 AM ✓" },
+  "Wed Jul 1":  { am_low: "3:13 AM (0.5 ft)", am_high: "8:56 AM (4.0 ft)", pm_low: "3:09 PM (0.6 ft)", pm_high: "9:21 PM (5.1 ft)", morning_status: "MEDIUM", morning_note: "Medium tide at 7–8 AM — cottage keeps things simple" },
+  "Thu Jul 2":  { am_low: "3:53 AM (0.5 ft)", am_high: "9:34 AM (4.0 ft)", pm_low: "3:48 PM (0.7 ft)", pm_high: "9:59 PM (5.0 ft)", morning_status: "LOW",    morning_note: "Low/medium tide — wide packed sand by 7 AM ✓✓" },
+  "Fri Jul 3":  { am_low: "4:30 AM (0.4 ft)", am_high: "10:16 AM (4.0 ft)", pm_low: "4:26 PM (0.8 ft)", pm_high: "10:40 PM (4.9 ft)", morning_status: "LOW",  morning_note: "Lowest tide of the week — widest packed sand ✓✓" },
+};
+
+const PLAN = [
+  {
+    day: "Sun Jun 28", label: "Sunday", type: "Cardio", location: "Cottage Driveway + Road",
+    icon: "🏃", color: "#C0501A", target_time: "7:00–7:45 AM",
+    warmup: "5 min: leg swings, hip circles, light jog in place, high knees, butt kicks",
+    exercises: [
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Opening set — full range, chest to ground.", tag: "chest" },
+      { name: "Mountain Climbers", equipment: "Bodyweight", sets: "3", reps: "30 sec", notes: "Fast pace, drive knees to chest. Core + cardio warm-up.", tag: "cardio" },
+      { name: "Sandbag Cleans", equipment: "Sandbag ~75 lbs", sets: "4", reps: "8", notes: "Explosive hip drive floor to chest. Reset each rep. Great full-body primer before sprint work.", tag: "cardio" },
+      { name: "Sprint ↔ Sandbag Carry (6 rounds)", equipment: "—", sets: "—", reps: "3 rounds each", notes: "Alternate sprint and carry for 3 rounds each.", tag: "cardio" },
+      { name: "  ↳ Sprint Intervals", equipment: "Running shoes", sets: "3", reps: "50m sprint", notes: "Full effort. Walk 60 sec back to start. Fixed landmark.", tag: "cardio" },
+      { name: "  ↳ Sandbag Carry Intervals", equipment: "Sandbag ~75 lbs", sets: "3", reps: "50m carry", notes: "Bear hug or shoulder carry. Switch shoulders each round.", tag: "cardio" },
+      { name: "Burpees", equipment: "Bodyweight", sets: "3", reps: "10", notes: "Full extension and jump at top. Step-back mod if HR too high.", tag: "cardio" },
+      { name: "Dumbbell Thrusters", equipment: "2×25 lb DBs", sets: "3", reps: "12", notes: "Front squat into overhead press. Short 45 sec rest.", tag: "cardio" },
+      { name: "Sandbag Lunge with Rotation", equipment: "Sandbag ~50–75 lbs", sets: "3", reps: "10/side", notes: "Step into a forward lunge, rotate the sandbag toward your front leg at the bottom. Drive back to standing. Targets glutes, quads, and obliques simultaneously.", tag: "cardio" },
+      { name: "Jump Squats", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Land soft, absorb through hips. Full squat depth each jump.", tag: "cardio" },
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Second block. 3 sec descent to maintain quality.", tag: "chest" },
+      { name: "V-Ups", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Reach hands and feet simultaneously. Regress to tuck if needed.", tag: "core" },
+      { name: "Dumbbell Russian Twists", equipment: "2×15 lb DBs", sets: "3", reps: "20/side", notes: "45° lean, controlled rotation. Feet raised = harder.", tag: "core" },
+      { name: "Leg Raises with Hip Raise", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Legs to 90°, small hip pop at top. 3 sec lower. Back flat.", tag: "core" },
+      { name: "Sandbag Crunches", equipment: "Sandbag ~25 lbs", sets: "3", reps: "20", notes: "Sandbag at chest. Added weight prevents sloppy reps.", tag: "core" },
+      { name: "Plank Hold", equipment: "Bodyweight", sets: "1", reps: "90 sec", notes: "Squeeze glutes and abs. Transition directly into side plank.", tag: "core" },
+      { name: "Side Plank Lifts", equipment: "Bodyweight", sets: "3", reps: "12/side", notes: "Dip hip to ground, drive back up. Full range. Both sides.", tag: "core" },
+      { name: "Plank Hold", equipment: "Bodyweight", sets: "3", reps: "90 sec", notes: "Finisher. Rest 30 sec between sets. Knees before hips sag.", tag: "core" },
+    ],
+    cooldown: "5 min: quad stretch, hamstring fold, pigeon pose, lying spinal twist, deep breathing",
+  },
+  {
+    day: "Mon Jun 29", label: "Monday", type: "Upper Body", location: "Cottage Driveway",
+    icon: "💪", color: "#2D6A4F", target_time: "7:00–8:00 AM",
+    warmup: "5 min: arm circles, shoulder rolls, 20 jumping jacks, 10 push-up walkouts, thoracic rotations",
+    exercises: [
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "15–20", notes: "Standard grip. 3 sec descent. Full chest-to-ground range.", tag: "chest" },
+      { name: "Dumbbell Floor Press", equipment: "2×25 lb DBs", sets: "4", reps: "10–12", notes: "Shirt/towel as pad. Lower until triceps touch ground, press explosively.", tag: "chest" },
+      { name: "Sandbag Floor Press", equipment: "Sandbag ~75 lbs", sets: "3", reps: "8–10", notes: "Bear hug the sandbag, press off chest. Heavier overload than DBs.", tag: "chest" },
+      { name: "Dumbbell Bent-Over Row", equipment: "2×25 lb DBs", sets: "4", reps: "10–12/side", notes: "Single-arm. Brace on cottage step. Drive elbow to hip.", tag: "back" },
+      { name: "Sandbag Bent-Over Row", equipment: "Sandbag ~75 lbs", sets: "3", reps: "10", notes: "Hips ~45°, pull to lower chest. Alternate grip each set.", tag: "back" },
+      { name: "Sandbag High Pull", equipment: "Sandbag ~50–75 lbs", sets: "3", reps: "10", notes: "Hinge at hips, explosively pull sandbag to chin height with elbows flaring wide. Hits rear delts and upper traps — balances the heavy push volume.", tag: "shoulders" },
+      { name: "Dumbbell Overhead Press", equipment: "2×25 lb DBs", sets: "3", reps: "10", notes: "Full lockout overhead, lower to ear height. Brace core.", tag: "shoulders" },
+      { name: "Dumbbell Delt Side Raises", equipment: "2×15 lb DBs", sets: "3", reps: "15", notes: "Raise to shoulder height only. 1 sec pause at top. 3 sec descent.", tag: "shoulders" },
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "2", reps: "15", notes: "Tempo: 3 sec down, 1 sec pause at bottom, explode up.", tag: "chest" },
+      { name: "Dumbbell Bicep Curl", equipment: "2×25 lb DBs", sets: "3", reps: "12", notes: "Alternate arms. Elbows pinned — don't let them drift at top.", tag: "arms" },
+      { name: "Tricep Dips", equipment: "Cottage step", sets: "3", reps: "12–15", notes: "Elbows track behind you. Add DB on lap to progress.", tag: "arms" },
+      { name: "Dumbbell Hammer Curl", equipment: "2×25 lb DBs", sets: "3", reps: "12", notes: "Neutral grip (thumbs up). Slow eccentric. Hits brachialis.", tag: "arms" },
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "max", notes: "Near-failure. Track number — aim to beat it Thursday.", tag: "chest" },
+      { name: "Plank Hold", equipment: "Bodyweight", sets: "3", reps: "90 sec", notes: "Rest 30 sec between sets. Drop to knees before form breaks.", tag: "core" },
+      { name: "Hollow Body Hold", equipment: "Bodyweight", sets: "3", reps: "30 sec", notes: "Arms overhead, lower back flat, legs 6 in. off ground. Banana shape.", tag: "core" },
+      { name: "Dumbbell Russian Twists", equipment: "2×15 lb DBs", sets: "3", reps: "20/side", notes: "45° lean, controlled rotation. Feet raised for more difficulty.", tag: "core" },
+      { name: "Bicycle Crunches", equipment: "Bodyweight", sets: "3", reps: "20/side", notes: "Slow and deliberate. Full rotation. Feet off ground throughout.", tag: "core" },
+      { name: "Dead Bug", equipment: "Bodyweight", sets: "3", reps: "10/side", notes: "Lower opposite arm and leg without arching lower back. Anti-rotation core.", tag: "core" },
+    ],
+    cooldown: "5 min: chest doorframe stretch, lat hang from step rail, child's pose, 90/90 hip stretch",
+  },
+  {
+    day: "Tue Jun 30", label: "Tuesday", type: "Lower Body", location: "Beach",
+    icon: "🏖️", color: "#1B6CA8", target_time: "7:00–8:00 AM",
+    warmup: "Carry sandbag to beach (loaded carry). Then: ankle circles, 10 walking lunges, lateral shuffles, hip circles, leg swings — 5 min.",
+    exercises: [
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "15", notes: "On packed sand near waterline for less sink.", tag: "chest" },
+      { name: "Sandbag Squat", equipment: "Sandbag ~100 lbs", sets: "4", reps: "10", notes: "Bear hug at chest. Sand instability recruits stabilizers. Full depth.", tag: "legs" },
+      { name: "Sandbag Romanian Deadlift", equipment: "Sandbag ~100 lbs", sets: "4", reps: "10–12", notes: "Hinge hips back, lower along shins. Full hamstring stretch at bottom.", tag: "legs" },
+      { name: "Walking Lunges", equipment: "Bodyweight", sets: "3", reps: "20 steps", notes: "~50 ft each way down the beach. Soft sand is brutal on glutes.", tag: "legs" },
+      { name: "Sandbag Sumo Squat", equipment: "Sandbag ~75 lbs", sets: "3", reps: "12", notes: "Wide stance, toes out. Sandbag low between legs. 2 sec pause at bottom.", tag: "legs" },
+      { name: "Sandbag Good Morning", equipment: "Sandbag ~50 lbs", sets: "3", reps: "12", notes: "Across upper back, hinge forward, back flat. Great hamstring/lower back.", tag: "legs" },
+      { name: "Single-Leg Glute Bridge", equipment: "Bodyweight", sets: "3", reps: "15/side", notes: "Lie in sand. Drive through heel, squeeze glute hard at top.", tag: "legs" },
+      { name: "Sandbag Lateral Lunge", equipment: "Sandbag ~50 lbs", sets: "3", reps: "10/side", notes: "Step wide, sit into hip, opposite leg straight. Targets adductors + glutes.", tag: "legs" },
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Feet elevated on sandbag for decline variation.", tag: "chest" },
+      { name: "Sandbag Squat", equipment: "Sandbag ~100 lbs", sets: "3", reps: "10", notes: "Second block — legs fatigued. Focus on depth and chest up. 90 sec rest.", tag: "legs" },
+      { name: "Sandbag Romanian Deadlift", equipment: "Sandbag ~100 lbs", sets: "3", reps: "10", notes: "Second block. 3 sec eccentric. Hamstrings will be burning.", tag: "legs" },
+      { name: "Bicycle Crunches", equipment: "Bodyweight", sets: "3", reps: "20/side", notes: "Slow and deliberate. Full rotation. Feet off ground throughout.", tag: "core" },
+      { name: "Flutter Kicks", equipment: "Bodyweight", sets: "3", reps: "30 sec", notes: "Hands under lower back, legs 6 in. off ground. Small controlled kicks.", tag: "core" },
+      { name: "Sandbag Russian Twist", equipment: "Sandbag ~25 lbs", sets: "3", reps: "20/side", notes: "Sit at ~45° lean, rotate sandbag side-to-side. Feet raised for more difficulty. Rotational balance to the day's hinge-dominant work.", tag: "core" },
+      { name: "Sandbag Sit-Ups", equipment: "Sandbag ~25 lbs", sets: "3", reps: "20", notes: "Hold sandbag at chest. Sand anchors feet. Full lie-back each rep.", tag: "core" },
+      { name: "Leg Raises with Hip Raise", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Legs to 90°, hip pop at top. 3 sec lower. Back flat throughout.", tag: "core" },
+      { name: "Sandbag Plank Hold", equipment: "Sandbag ~25 lbs", sets: "3", reps: "60 sec (max)", notes: "Sandbag on lower back. Added load forces better bracing. 30 sec rest.", tag: "core" },
+    ],
+    cooldown: "5 min: hip flexor lunge stretch, pigeon pose in sand, standing quad pull, walk into water to cool legs",
+  },
+  {
+    day: "Wed Jul 1", label: "Wednesday", type: "Cardio", location: "Cottage",
+    icon: "🏃", color: "#C0501A", target_time: "7:00–7:45 AM",
+    warmup: "5 min: arm swings, leg swings, jog in place, quick lateral shuffles, high knees",
+    exercises: [
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Opening. Use as active rest between sprint rounds.", tag: "chest" },
+      { name: "Mountain Climbers", equipment: "Bodyweight", sets: "3", reps: "30 sec", notes: "Fast. Core + cardio in one.", tag: "cardio" },
+      { name: "Sprint ↔ Sandbag Carry (8 rounds)", equipment: "—", sets: "—", reps: "4 rounds each", notes: "Step up from Sunday — 4 rounds each. During the 60 sec walk-back rest after each sprint: do 1 set of Delt Side Raises, then 1 set of Tricep Dips.", tag: "cardio" },
+      { name: "  ↳ Sprint Intervals", equipment: "Running shoes", sets: "4", reps: "50m sprint", notes: "Full effort. Walk back 60 sec — use rest for Delt Raises + Dips.", tag: "cardio" },
+      { name: "  ↳ Sandbag Carry Intervals", equipment: "Sandbag ~75–100 lbs", sets: "4", reps: "50m carry", notes: "Heavier than Sunday. Rotate carry style each round. Rest: Delt Raises + Dips.", tag: "cardio" },
+      { name: "  ↳ Delt Side Raises (in rest)", equipment: "2×15 lb DBs", sets: "4", reps: "15", notes: "Done during walk-back rest after each sprint. Raise to shoulder height, 1 sec pause, 3 sec descent.", tag: "shoulders" },
+      { name: "  ↳ Tricep Dips (in rest)", equipment: "Cottage step", sets: "4", reps: "12–15", notes: "Done immediately after Delt Raises each rest period. Elbows track behind you.", tag: "arms" },
+      { name: "Burpee to Sandbag Clean", equipment: "Sandbag ~50 lbs", sets: "3", reps: "8", notes: "Full burpee, then explosively clean sandbag to chest at top.", tag: "cardio" },
+      { name: "Sandbag Thrusters", equipment: "Sandbag ~50–75 lbs", sets: "3", reps: "10", notes: "Front squat into overhead press. 45 sec rest.", tag: "cardio" },
+      { name: "Sandbag Box Step-Ups", equipment: "Sandbag ~50 lbs + cottage step", sets: "3", reps: "12/leg", notes: "Step up, drive knee to chest at top. Alternate legs.", tag: "cardio" },
+      { name: "Jump Squats", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Go straight into these after step-ups. Full depth before each jump.", tag: "cardio" },
+      { name: "Sandbag Lunge with Rotation", equipment: "Sandbag ~50 lbs", sets: "3", reps: "10/side", notes: "Step into a forward lunge, rotate sandbag toward your front leg at the bottom. Drive back to standing.", tag: "cardio" },
+      { name: "Hanging Leg Raises", equipment: "Bodyweight", sets: "3", reps: "12", notes: "Hang from cottage structure. Raise straight legs to 90°. Sub: lying leg raises with hip raise.", tag: "core" },
+      { name: "Plank to Downward Dog", equipment: "Bodyweight", sets: "3", reps: "12", notes: "From plank, push hips up to downward dog, return. Dynamic core + shoulders.", tag: "core" },
+      { name: "Bicycle Crunches", equipment: "Bodyweight", sets: "3", reps: "20/side", notes: "Slow and controlled. Full rotation. Feet off ground.", tag: "core" },
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Second block. 3 sec slow descent.", tag: "chest" },
+      { name: "Side Plank Raises", equipment: "Bodyweight", sets: "3", reps: "12/side", notes: "From side plank, dip hip to ground and drive back up. Both sides.", tag: "core" },
+      { name: "Plank Hold", equipment: "Bodyweight", sets: "3", reps: "90 sec", notes: "Finisher. 30 sec rest between sets.", tag: "core" },
+    ],
+    cooldown: "5 min: quad stretch, hamstring fold, hip flexor stretch, lying spinal twist",
+  },
+  {
+    day: "Thu Jul 2", label: "Thursday", type: "Upper Body", location: "Beach 🌟 Best Tide",
+    icon: "💪", color: "#2D6A4F", target_time: "7:00–8:00 AM",
+    warmup: "5 min: shoulder circles, push-up walkouts, arm swings, 10 inchworms across the sand",
+    exercises: [
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "4", reps: "15–20", notes: "Feet elevated on sandbag for decline. Hands in soft sand.", tag: "chest" },
+      { name: "Sandbag Push Press", equipment: "Sandbag ~75 lbs", sets: "4", reps: "8", notes: "Dip knees, use leg drive to launch overhead. Full lockout.", tag: "shoulders" },
+      { name: "Sandbag Floor Press", equipment: "Sandbag ~75 lbs", sets: "4", reps: "10", notes: "Lie in sand. Bear hug and press off chest. Shifting fill = instability.", tag: "chest" },
+      { name: "Sandbag Bent-Over Row", equipment: "Sandbag ~100 lbs", sets: "4", reps: "10", notes: "Go heavier — sand anchors feet. Pull to lower chest. New handle each set.", tag: "back" },
+      { name: "Sandbag Zercher Carry + Row", equipment: "Sandbag ~75 lbs", sets: "3", reps: "20m + 10 rows", notes: "Carry in crook of arms, stop, do 10 Zercher rows. Walk back. No rest.", tag: "back" },
+      { name: "Sandbag Clean", equipment: "Sandbag ~75 lbs", sets: "3", reps: "8", notes: "Explosive hip drive floor to chest. Like a power clean. Reset each rep.", tag: "back" },
+      { name: "Sandbag Overhead Hold Walk", equipment: "Sandbag ~50 lbs", sets: "3", reps: "20m", notes: "Press overhead and walk the beach. Shoulder stability + core + grip.", tag: "shoulders" },
+      { name: "Diamond Push-Ups", equipment: "Bodyweight", sets: "3", reps: "12", notes: "Hands forming a diamond under chest. Hits triceps hard.", tag: "arms" },
+      { name: "Sandbag Bicep Curl", equipment: "Sandbag ~25–50 lbs", sets: "3", reps: "12", notes: "Neutral grip on handles. Awkward weight recruits more forearm + stabilizers.", tag: "arms" },
+      { name: "Sandbag Overhead Tricep Lower", equipment: "Sandbag ~25–50 lbs", sets: "3", reps: "12", notes: "Hold overhead, bend elbows to lower behind head, extend. Triceps under tension.", tag: "arms" },
+      { name: "Hollow Body Hold", equipment: "Bodyweight", sets: "3", reps: "30 sec", notes: "Arms overhead, legs 6 in. off ground, lower back into sand. Banana shape.", tag: "core" },
+      { name: "Sandbag V-Sit Hold", equipment: "Sandbag ~25 lbs", sets: "3", reps: "20 sec", notes: "V-sit on tailbone, sandbag extended in front. Brutal oblique + hip flexor.", tag: "core" },
+      { name: "Toe Touches", equipment: "Bodyweight", sets: "3", reps: "20", notes: "Legs straight up, reach hands to toes. Lower legs halfway, repeat.", tag: "core" },
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "max", notes: "Near-failure. Track reps — compare with Monday.", tag: "chest" },
+      { name: "Side Plank Raises", equipment: "Bodyweight", sets: "3", reps: "12/side", notes: "Dip hip and drive back up. Soft sand adds stabilisation challenge.", tag: "core" },
+      { name: "L-Sit Hold", equipment: "Bodyweight", sets: "3", reps: "20 sec", notes: "Sit on sand, hands beside hips, press down to lift legs straight off ground. Rest 30 sec between sets. Brutal hip flexor + tricep + core finisher. Scale by bending knees if needed.", tag: "core" },
+    ],
+    cooldown: "5 min: chest stretch (reach arms back), lat stretch, child's pose in sand, walk into the water",
+  },
+  {
+    day: "Fri Jul 3", label: "Friday", type: "Lower Body", location: "Beach 🌟 Best Tide",
+    icon: "🏖️", color: "#1B6CA8", target_time: "7:00–8:00 AM",
+    warmup: "5 min: leg swings, walking lunges, ankle circles, lateral shuffles, hip circles",
+    exercises: [
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "20", notes: "Wide grip (chest) first set, narrow grip (triceps) last set.", tag: "chest" },
+      { name: "Sandbag Squat", equipment: "Sandbag ~100–125 lbs", sets: "4", reps: "10", notes: "Heaviest squat of the week — best footing. Bear hug or rear-load. Full depth.", tag: "legs" },
+      { name: "Sandbag Romanian Deadlift", equipment: "Sandbag ~100 lbs", sets: "4", reps: "12", notes: "3 sec down, explosive up. Packed sand = solid footing for heavy loading.", tag: "legs" },
+      { name: "Sandbag Forward Lunge", equipment: "Sandbag ~75 lbs", sets: "3", reps: "10/leg", notes: "Step forward, push back to standing. More quad demand than reverse lunge.", tag: "legs" },
+      { name: "Sandbag Sumo Deadlift", equipment: "Sandbag ~125 lbs", sets: "3", reps: "10", notes: "Max weight — wide stance, toes out, both hands on center handles. Drive through heels.", tag: "legs" },
+      { name: "Sandbag Good Morning", equipment: "Sandbag ~50 lbs", sets: "3", reps: "12", notes: "Across upper back, hinge forward, flat back. Finishes off hamstrings.", tag: "legs" },
+      { name: "Sandbag Walking Lunges", equipment: "Sandbag ~50 lbs", sets: "3", reps: "20 steps", notes: "Sandbag at chest — upgrade from Tuesday bodyweight. Best tide = longest sand.", tag: "legs" },
+      { name: "Single-Leg Glute Bridge", equipment: "Bodyweight", sets: "3", reps: "15/side", notes: "Explosive drive up, 3 sec lower. Squeeze glute hard at top.", tag: "legs" },
+      { name: "Sandbag Squat", equipment: "Sandbag ~100 lbs", sets: "3", reps: "10", notes: "Second block — legs fully fatigued. Depth and chest up. 90 sec rest.", tag: "legs" },
+      { name: "Sandbag Romanian Deadlift", equipment: "Sandbag ~100 lbs", sets: "3", reps: "10", notes: "Second block. 3 sec eccentric. Hamstrings on fire — that's correct.", tag: "legs" },
+      { name: "Glute Kickbacks", equipment: "Bodyweight", sets: "3", reps: "15/side", notes: "Hands and knees in sand. Kick leg back and up, squeeze glute at top.", tag: "legs" },
+      { name: "Push-Ups", equipment: "Bodyweight", sets: "3", reps: "max", notes: "Final block. Track reps — compare to Monday and Thursday.", tag: "chest" },
+      { name: "Sandbag Plank Drag", equipment: "Sandbag ~25–50 lbs", sets: "3", reps: "10/side", notes: "In plank, drag sandbag under body from side to side with one hand. Keep hips dead still — that's the whole challenge. Anti-rotation finisher.", tag: "core" },
+      { name: "V-Ups", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Sand soft on spine. Straight legs, reach hands to feet. Regress to tuck.", tag: "core" },
+      { name: "Sandbag Sit-Up Throw (simulate)", equipment: "Sandbag ~25 lbs", sets: "3", reps: "15", notes: "Full sit-up, press sandbag overhead at top as if throwing. Lower slow.", tag: "core" },
+      { name: "Leg Raises with Hip Raise", equipment: "Bodyweight", sets: "3", reps: "15", notes: "Legs to 90°, hip pop at top. 3 sec lower. Back flat throughout.", tag: "core" },
+      { name: "Side Plank Raises", equipment: "Bodyweight", sets: "3", reps: "12/side", notes: "Dip hip to ground, drive back up. Full range. Both sides.", tag: "core" },
+      { name: "L-Sit Hold", equipment: "Bodyweight", sets: "3", reps: "20 sec", notes: "Hands beside hips on packed sand, press down to lift legs straight. Rest 30 sec. Scale by bending knees. End of week — you'll feel how much core you've built.", tag: "core" },
+      { name: "Sandbag Plank Hold", equipment: "Sandbag ~25 lbs", sets: "3", reps: "90 sec", notes: "Sandbag on lower back. Longest plank of the week. 30 sec rest. You earned it.", tag: "core" },
+    ],
+    cooldown: "5 min: hip flexor lunge, pigeon pose in sand, lying spinal twist, walk into the ocean — you earned it 🎆",
+  },
+];
+
+const TYPE_BADGE = {
+  "Upper Body": { bg: "#D8F3DC", text: "#2D6A4F" },
+  "Lower Body": { bg: "#D6EAF8", text: "#1B6CA8" },
+  "Cardio":     { bg: "#FDE8D8", text: "#9C3A0D" },
+};
+
+const TAG_COLORS = {
+  chest:     { bg: "#FDE8D8", text: "#9C3A0D" },
+  back:      { bg: "#E8D5F5", text: "#6B21A8" },
+  shoulders: { bg: "#FEF9C3", text: "#854D0E" },
+  arms:      { bg: "#FCE7F3", text: "#9D174D" },
+  legs:      { bg: "#D6EAF8", text: "#1B6CA8" },
+  core:      { bg: "#D8F3DC", text: "#2D6A4F" },
+  cardio:    { bg: "#FFE4E1", text: "#C0392B" },
+};
+
+// ── State ──────────────────────────────────────────────────────────────────────
+let activeDay = 0;
+let expandedMap = {};   // key: "dayIndex-exIndex" → bool
+let filterTag = null;
+
+function toggleExpand(dayIdx, exIdx) {
+  const key = `${dayIdx}-${exIdx}`;
+  expandedMap[key] = !expandedMap[key];
+  renderContent();
+}
+
+function setDay(idx) {
+  activeDay = idx;
+  filterTag = null;
+  expandedMap = {};
+  renderNav();
+  renderContent();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setFilter(tag) {
+  filterTag = (filterTag === tag) ? null : tag;
+  renderContent();
+}
+
+// ── Render nav ─────────────────────────────────────────────────────────────────
+function renderNav() {
+  const nav = document.getElementById('dayNav');
+  nav.innerHTML = PLAN.map((d, i) => {
+    const isActive = i === activeDay;
+    const parts = d.day.split(' ');
+    return `
+      <button class="day-btn${isActive ? ' active' : ''}"
+        style="border-bottom-color: ${isActive ? d.color : 'transparent'}"
+        onclick="setDay(${i})">
+        <div class="day-btn-icon">${d.icon}</div>
+        <div class="day-btn-label" style="color: ${isActive ? d.color : '#777'}">${d.label.split(' ')[0].toUpperCase()}</div>
+        <div class="day-btn-date">${parts[1]} ${parts[2]}</div>
+      </button>`;
+  }).join('');
+}
+
+// ── Render main content ────────────────────────────────────────────────────────
+function renderContent() {
+  const d = PLAN[activeDay];
+  const tide = TIDES[d.day];
+  const badge = TYPE_BADGE[d.type] || { bg: "#EAF0F6", text: "#3D4F5C" };
+  const tideClass = tide.morning_status === "LOW" ? "tide-low" : tide.morning_status === "MEDIUM" ? "tide-medium" : "tide-high";
+  const tidePillBg = tide.morning_status === "LOW" ? "#AED6F1" : tide.morning_status === "MEDIUM" ? "#A9DFBF" : "#FAD7A0";
+
+  const allTags = [...new Set(d.exercises.map(e => e.tag))];
+  const filtered = filterTag ? d.exercises.filter(e => e.tag === filterTag) : d.exercises;
+
+  // Tag filter buttons
+  const tagBtns = [
+    `<button class="tag-btn" style="background:${!filterTag ? '#1a3a2a' : '#E8E2D8'}; color:${!filterTag ? 'white' : '#555'}" onclick="setFilter(null)">All</button>`,
+    ...allTags.map(tag => {
+      const tc = TAG_COLORS[tag] || { bg: '#eee', text: '#333' };
+      const isActive = filterTag === tag;
+      return `<button class="tag-btn" style="background:${isActive ? tc.text : tc.bg}; color:${isActive ? 'white' : tc.text}" onclick="setFilter('${tag}')">${tag}</button>`;
+    })
+  ].join('');
+
+  // Exercise rows
+  const exerciseRows = filtered.map(ex => {
+    const realIdx = d.exercises.indexOf(ex);
+    const key = `${activeDay}-${realIdx}`;
+    const isOpen = !!expandedMap[key];
+    const isSub = ex.name.startsWith('  ↳');
+    const tc = TAG_COLORS[ex.tag] || { bg: '#eee', text: '#333' };
+    const tagPill = !isSub ? `<span class="exercise-tag-pill" style="background:${tc.bg}; color:${tc.text}">${ex.tag}</span>` : '';
+    const notes = isOpen ? `<div class="exercise-notes"><div class="exercise-notes-inner">💡 ${ex.notes}</div></div>` : '';
+    return `
+      <div class="exercise-card">
+        <button class="exercise-btn" onclick="toggleExpand(${activeDay}, ${realIdx})">
+          <div style="flex:1">
+            <div class="exercise-name-row">
+              <span class="exercise-name${isSub ? ' sub' : ''}">${ex.name}</span>
+              ${tagPill}
+            </div>
+            <div class="exercise-sets">${ex.sets} sets · ${ex.reps}</div>
+          </div>
+          <div class="exercise-right">
+            <span class="exercise-equip">${ex.equipment}</span>
+            <span class="exercise-chevron">${isOpen ? '▲' : '▼'}</span>
+          </div>
+        </button>
+        ${notes}
+      </div>`;
+  }).join('');
+
+  // Week overview rows
+  const weekRows = PLAN.map((wd, i) => {
+    const wt = TIDES[wd.day];
+    const pillBg = wt.morning_status === "LOW" ? "#AED6F1" : wt.morning_status === "MEDIUM" ? "#A9DFBF" : "#FAD7A0";
+    return `
+      <button class="week-item${i === activeDay ? ' active' : ''}" onclick="setDay(${i})">
+        <span class="week-item-icon">${wd.icon}</span>
+        <div class="week-item-text">
+          <div class="week-item-name">${wd.label} · ${wd.type}</div>
+          <div class="week-item-loc">${wd.location}</div>
+        </div>
+        <span class="tide-pill" style="background:${pillBg}">${wt.morning_status}</span>
+      </button>`;
+  }).join('');
+
+  document.getElementById('mainContent').innerHTML = `
+    <!-- Day header -->
+    <div class="day-header">
+      <div>
+        <div class="day-title">${d.label} — <span style="color:${d.color}">${d.type}</span></div>
+        <div class="day-meta">📍 ${d.location} &nbsp;·&nbsp; ⏰ ${d.target_time}</div>
+      </div>
+      <span class="type-badge" style="background:${badge.bg}; color:${badge.text}">${d.type}</span>
+    </div>
+
+    <!-- Tide card -->
+    <div class="tide-card ${tideClass}">
+      <div class="card-label">🌊 Tide · ${d.day}</div>
+      <div class="tide-times"><strong>AM Low:</strong> ${tide.am_low} &nbsp;|&nbsp; <strong>AM High:</strong> ${tide.am_high}</div>
+      <div class="tide-note">${tide.morning_note}</div>
+    </div>
+
+    <!-- Warm-up -->
+    <div class="card">
+      <div class="card-label">Warm-Up</div>
+      <div class="card-text">${d.warmup}</div>
+    </div>
+
+    <!-- Tag filters -->
+    <div class="tag-filters">${tagBtns}</div>
+    <div class="filter-count">${filtered.length} exercise${filtered.length !== 1 ? 's' : ''}${filterTag ? ' · ' + filterTag : ''}</div>
+
+    <!-- Exercises -->
+    <div>${exerciseRows}</div>
+
+    <!-- Cool-down -->
+    <div class="card">
+      <div class="card-label">Cool-Down</div>
+      <div class="card-text">${d.cooldown}</div>
+    </div>
+
+    <!-- Week overview -->
+    <div class="week-overview">
+      <div class="week-label">Week at a Glance</div>
+      <div class="week-list">${weekRows}</div>
+    </div>
+
+    <!-- Notes -->
+    <div class="notes-card">
+      <div class="card-label">Notes &amp; Tips</div>
+      <ul>
+        <li><strong>Beach days (Tue, Thu, Fri):</strong> Sandbag only — no dumbbells needed or brought.</li>
+        <li><strong>Cottage days (Sun, Mon, Wed):</strong> Full kit — sandbag + both sets of dumbbells.</li>
+        <li>Bring a shirt or towel to pad concrete for floor presses on Monday.</li>
+        <li>Scale sandbag to 75 lbs for overhead; go 100–125 lbs for squats and deadlifts.</li>
+        <li>Daily beach walk is in addition to the structured workout.</li>
+        <li>Start by 7 AM every day — NC summer heat builds fast. Bring water.</li>
+        <li>Tap any exercise to expand coaching notes. Use tag filters to focus on a muscle group.</li>
+      </ul>
+    </div>
+  `;
+}
+
+
+// ── Sat Jul 4 added to TIDES (full trip calendar) ────────────────────────────
+const TIDE_CALENDAR = [
+  {
+    key: "Sun Jun 28", label: "Sunday, June 28", workout: "Cardio", workoutColor: "#C0501A", workoutBg: "#FDE8D8",
+    status: "HIGH", statusLabel: "🔴 High Tide", dotColor: "#C0501A",
+    am_high: { time: "6:55 AM", height: "4.0 ft" }, am_low: { time: "1:05 AM", height: "0.8 ft" },
+    pm_high: { time: "7:28 PM", height: "5.3 ft" }, pm_low: { time: "1:02 PM", height: "0.5 ft" },
+    note: "High tide peaks right at 7 AM — beach mostly covered during workout window. Use driveway."
+  },
+  {
+    key: "Mon Jun 29", label: "Monday, June 29", workout: "Upper Body", workoutColor: "#2D6A4F", workoutBg: "#D8F3DC",
+    status: "HIGH", statusLabel: "🔴 High Tide", dotColor: "#2D6A4F",
+    am_high: { time: "7:39 AM", height: "4.0 ft" }, am_low: { time: "1:49 AM", height: "0.7 ft" },
+    pm_high: { time: "8:08 PM", height: "5.3 ft" }, pm_low: { time: "1:46 PM", height: "0.5 ft" },
+    note: "High tide during workout window — still rising through 8 AM. Use driveway."
+  },
+  {
+    key: "Tue Jun 30", label: "Tuesday, June 30", workout: "Lower Body", workoutColor: "#1B6CA8", workoutBg: "#D6EAF8",
+    status: "MEDIUM", statusLabel: "🟡 Medium", dotColor: "#1B6CA8",
+    am_high: { time: "8:18 AM", height: "4.0 ft" }, am_low: { time: "2:32 AM", height: "0.6 ft" },
+    pm_high: { time: "8:45 PM", height: "5.2 ft" }, pm_low: { time: "2:29 PM", height: "0.6 ft" },
+    note: "Tide rising but decent packed sand available at 7 AM. Beach workout ✓"
+  },
+  {
+    key: "Wed Jul 1", label: "Wednesday, July 1", workout: "Cardio", workoutColor: "#C0501A", workoutBg: "#FDE8D8",
+    status: "MEDIUM", statusLabel: "🟡 Medium", dotColor: "#C0501A",
+    am_high: { time: "8:56 AM", height: "4.0 ft" }, am_low: { time: "3:13 AM", height: "0.5 ft" },
+    pm_high: { time: "9:21 PM", height: "5.1 ft" }, pm_low: { time: "3:09 PM", height: "0.6 ft" },
+    note: "Medium tide at 7–8 AM — usable beach but cottage is simpler for cardio intervals."
+  },
+  {
+    key: "Thu Jul 2", label: "Thursday, July 2 🌟", workout: "Upper Body", workoutColor: "#2D6A4F", workoutBg: "#D8F3DC",
+    status: "LOW", statusLabel: "🟢 Low Tide", dotColor: "#2D6A4F",
+    am_high: { time: "9:34 AM", height: "4.0 ft" }, am_low: { time: "3:53 AM", height: "0.5 ft" },
+    pm_high: { time: "9:59 PM", height: "5.0 ft" }, pm_low: { time: "3:48 PM", height: "0.7 ft" },
+    note: "Low/medium tide — wide packed sand by 7 AM. Great beach workout day ✓✓"
+  },
+  {
+    key: "Fri Jul 3", label: "Friday, July 3 🌟", workout: "Lower Body", workoutColor: "#1B6CA8", workoutBg: "#D6EAF8",
+    status: "LOW", statusLabel: "🟢 Low Tide", dotColor: "#1B6CA8",
+    am_high: { time: "10:16 AM", height: "4.0 ft" }, am_low: { time: "4:30 AM", height: "0.4 ft" },
+    pm_high: { time: "10:40 PM", height: "4.9 ft" }, pm_low: { time: "4:26 PM", height: "0.8 ft" },
+    note: "Lowest tide of the week — widest packed sand at 7 AM. Best beach day ✓✓"
+  },
+  {
+    key: "Sat Jul 4", label: "Saturday, July 4 🎆", workout: "Rest / 4th of July", workoutColor: "#5C6B7A", workoutBg: "#EAF0F6",
+    status: "LOW", statusLabel: "🟢 Low Tide", dotColor: "#5C6B7A",
+    am_high: { time: "11:04 AM", height: "4.1 ft" }, am_low: { time: "5:07 AM", height: "0.4 ft" },
+    pm_high: { time: "11:26 PM", height: "4.8 ft" }, pm_low: { time: "5:07 PM", height: "0.8 ft" },
+    note: "Low tide through the morning — excellent beach conditions all day for the 4th. Enjoy it!"
+  },
+];
+
+// ── Page switching ─────────────────────────────────────────────────────────────
+let activePage = 'workout';
+
+function showPage(page) {
+  activePage = page;
+  document.getElementById('btnWorkout').classList.toggle('active', page === 'workout');
+  document.getElementById('btnTides').classList.toggle('active', page === 'tides');
+  document.getElementById('workoutSection').style.display = page === 'workout' ? '' : 'none';
+  document.getElementById('tidesSection').style.display = page === 'tides' ? '' : 'none';
+}
+
+// ── Render tide calendar ──────────────────────────────────────────────────────
+function renderTidePage() {
+  const statusBg = { HIGH: '#FFF3CD', MEDIUM: '#DFF5E4', LOW: '#D5EFFF' };
+  const statusText = { HIGH: '#8B5E00', MEDIUM: '#1E4D35', LOW: '#0A3A5C' };
+
+  const cards = TIDE_CALENDAR.map(d => {
+    const sbg = statusBg[d.status];
+    const stxt = statusText[d.status];
+    return `
+      <div class="tide-day-card">
+        <div class="tide-day-header">
+          <div class="tide-day-dot" style="background:${d.dotColor}"></div>
+          <div class="tide-day-name">${d.label}</div>
+          <span class="tide-day-badge" style="background:${d.workoutBg}; color:${d.workoutColor}">${d.workout}</span>
+        </div>
+        <div class="tide-grid">
+          <div class="tide-cell is-low">
+            <div class="tide-cell-label">AM Low</div>
+            <div class="tide-cell-time">${d.am_low.time}</div>
+            <div class="tide-cell-height">${d.am_low.height}</div>
+          </div>
+          <div class="tide-cell is-high">
+            <div class="tide-cell-label">AM High</div>
+            <div class="tide-cell-time">${d.am_high.time}</div>
+            <div class="tide-cell-height">${d.am_high.height}</div>
+          </div>
+          <div class="tide-cell is-low">
+            <div class="tide-cell-label">PM Low</div>
+            <div class="tide-cell-time">${d.pm_low.time}</div>
+            <div class="tide-cell-height">${d.pm_low.height}</div>
+          </div>
+          <div class="tide-cell is-high">
+            <div class="tide-cell-label">PM High</div>
+            <div class="tide-cell-time">${d.pm_high.time}</div>
+            <div class="tide-cell-height">${d.pm_high.height}</div>
+          </div>
+        </div>
+        <div class="tide-morning-note">
+          <span style="display:inline-block; background:${sbg}; color:${stxt}; font-style:normal; font-weight:700;
+            font-size:10px; text-transform:uppercase; letter-spacing:0.8px; padding:2px 8px; border-radius:10px; margin-right:7px;">
+            ${d.statusLabel}
+          </span>${d.note}
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('tidesSection').innerHTML = `
+    <div class="tide-page">
+      <div class="tide-page-title">🌊 Tide Calendar</div>
+      <div class="tide-page-sub">Sunset Beach Pier · NOAA Station #8659897 · All times EDT · Heights in feet (MLLW)</div>
+      ${cards}
+      <div class="tide-source">
+        Tide heights are low tide (green) and high tide (blue).<br>
+        Source: NOAA / US Harbors · Predictions accurate to ±10 min / ±0.5 ft.<br>
+        🟢 Low = widest beach · 🟡 Medium = decent sand · 🔴 High = beach mostly covered
+      </div>
+    </div>`;
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+renderNav();
+renderContent();
+renderTidePage();
+
+</script>
+</body>
+</html>
